@@ -1,9 +1,0 @@
-These are some logs that I copied over from console:
-
-Peer 1:
-File received: '6.txt' in 11ms from query '6'
-File received: '7.txt' in 11ms from query '7'
-File received: '8.txt' in 11ms from query '8'
-File received: '9.txt' in 3ms from query '9'
-File received: '10.txt' in 3ms from query '10'
-
