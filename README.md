@@ -36,10 +36,19 @@ Home page after query finished:
 - Throughput: On average approximately 173 consecutive queries were finished in one second (173 queries/sec)
 
 #### Proposed Routing Protocol:
+I chose option 2.2 and varied queries from 10, 20, and 40 with a fixed number of files of 10 for each of the 5 peers.
+
+10 queries:
 - Latency:
 - Throughput:
 
+20 queries:
+- Latency:
+- Throughput:
 
+40 queries:
+- Latency:
+- Throughput:
 
 ## Scalability:
 
