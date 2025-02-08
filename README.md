@@ -22,9 +22,17 @@ Home page with entered queries:
 Home page after query finished:
 ![img2](https://github.com/user-attachments/assets/ffb9e955-6ec4-4f74-b8c3-3e7b0e7e4599)
 
-Measurements:
+## Measurements:
+
+#### Baseline:
 Latency: On average it took 7ms/query for a ~5 byte file
-Throughput: 
+Throughput: On average approximately 173 consecutive queries were finished in one second (173 queries/sec)
+
+#### Proposed Routing Protocol:
+Latency:
+Throughput:
+
+
 
 ## Scalability:
 
