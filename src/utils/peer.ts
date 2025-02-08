@@ -1,6 +1,7 @@
 import Peer, { DataConnection } from "peerjs";
 import { PEER_HOST, PEER_PATH, PEER_PORT } from "./common";
 import { PeerResponse } from "./types";
+import { blob } from "stream/consumers";
 
 let peer: Peer | undefined;
 let connectionMap: Record<string, DataConnection> = {};
@@ -89,7 +90,10 @@ const getPeer = () => peer;
 // this function is used to forward the query to other peers
 const listenForData = (
   checkIfFileExists: (data: any) => File | undefined,
-  forwardFunction: (data: any) => void
+  forwardFunction: (data: any) => void,
+  setTimeTaken: (time: number) => void,
+  setBlobURL: (url: string) => void,
+  setResponseFileName: (name: string) => void
 ) => {
   if (!peer) {
     throw new Error("Peer not initialized");
@@ -114,9 +118,11 @@ const listenForData = (
             let returnData = {
               type: "file",
               file: file,
-              blob: new Blob([file]),
+              blob: URL.createObjectURL(file),
+              startTimeStamp: data.startTimeStamp,
               sender: data.sender,
               keyword: data.keyword,
+              endTimeStamp: new Date().getTime(),
             };
             const connnection = peer?.connect(data.sender);
             connnection?.on("open", () => {
@@ -124,7 +130,14 @@ const listenForData = (
             });
           }
         } else if (data.type === "file") {
-          console.log("File received:", data.file.name);
+          console.log(
+            `File received: ${data.file.name} in ${
+              data.endTimeStamp - data.startTimeStamp
+            }ms`
+          );
+          setTimeTaken(data.endTimeStamp - data.startTimeStamp);
+          setBlobURL(data.blob);
+          setResponseFileName(data.file.name);
         }
       });
     });

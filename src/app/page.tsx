@@ -26,6 +26,9 @@ export default function Home() {
   const [connectionMap, setConnectionMap] = useState<{
     [key: string]: DataConnection;
   }>({});
+  const [timeTaken, setTimeTaken] = useState<number>(0);
+  const [blobURL, setBlobURL] = useState<string>("");
+  const [responseFileName, setResponseFileName] = useState<string>("");
 
   const checkIfFileExists = (data: any) => {
     const latestFiles = filesRef.current;
@@ -46,7 +49,13 @@ export default function Home() {
   const handleLogin = async () => {
     setPeerId(tempPeerId);
     const response = await PeerMethods.startServer(tempPeerId);
-    PeerMethods.listenForData(checkIfFileExists, handleForwardQueries);
+    PeerMethods.listenForData(
+      checkIfFileExists,
+      handleForwardQueries,
+      setTimeTaken,
+      setBlobURL,
+      setResponseFileName
+    );
 
     if (response.valid) {
       toaster.create({
@@ -91,6 +100,7 @@ export default function Home() {
       keyword: query,
       sender: peerId,
       type: "query",
+      startTimeStamp: new Date().getTime(),
     };
     handleForwardQueries(data);
   };
@@ -159,6 +169,21 @@ export default function Home() {
                       return <div key={idx}>Connected to {el}</div>;
                     })}
                   </div>
+                )}
+                {index === 3 && timeTaken > 0 && blobURL !== "" && (
+                  <>
+                    <div
+                      className="underline cursor-pointer"
+                      onClick={() => {
+                        window.open(blobURL, "_blank");
+                      }}
+                    >
+                      Open File
+                    </div>
+                    <div className="font-semibold text-lg">
+                      It took {timeTaken}ms to retrieve this file
+                    </div>
+                  </>
                 )}
               </div>
             );
