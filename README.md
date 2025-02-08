@@ -14,6 +14,15 @@ To properly run this, you can run the startup.sh shell script provided. This com
 4. From any peer you can input queries that represent file names of files uploaded in other peers. In other words, you can search for files that are already uploaded in other peers. The current system checks to see if the entire query matches the filename without the extension (e.g. test.txt -> test).
 5. When it finishes searching through all peers, the timestamp for how long it took and a blob url is returned to the user. Using the blob url, any peer is able to download another peer's file.
 
+
+## Screen shots:
+Home page with entered queries: 
+![img1](https://github.com/user-attachments/assets/0dcefea6-04a4-484f-9b2b-043bf6058710)
+
+Home page after query finished:
+![img2](https://github.com/user-attachments/assets/ffb9e955-6ec4-4f74-b8c3-3e7b0e7e4599)
+
+
 ## Scalability:
 
 Given the super quick latency of searching for files, the website is somewhat scalable. Many people could access this website at the same time and send and receive files as they please. However, a lot of the functionalities fall off once larger files are starting to be uploaded at scale.
