@@ -64,7 +64,9 @@ I chose option 2.2 and varied queries from 10, 20, and 40 with a fixed number of
 - Throughput: 40 queries/184ms or 217.3 queries/s
 
 ## Discussion
-It's interesting to see that the times are staying pretty constant for every interval increase of queries. My initial expectation was that as you increase the amount of queries, the system will get overloaded even more, causing the throughput to decrease and the latency to increase. However, that is not the case. Within the alternative systems, I found that the 20 query option to marginally be the best because of its fastest latency time and highest throughput.
+It's interesting to see that the times are staying pretty constant for every interval increase of queries. My initial expectation was that as you increase the amount of queries, the system will get overloaded even more, causing the throughput to decrease and the latency to increase. However, that is not the case. Within the alternative systems, I found that the 20 query option to marginally be the best because of its fastest latency time and highest throughput. 
+
+One pro of having more files in each of the peers include needing less network hops on average, while one con is that searching through a list of files is a O(n) operation, meaning at a certain point it will exceed the time it takes to hop from peer to peer.
 
 ## Scalability:
 
