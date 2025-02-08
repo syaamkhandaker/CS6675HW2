@@ -32,27 +32,27 @@ Home page after query finished:
 ## Measurements:
 
 #### Baseline:
-- Latency: On average it took 7ms/query for a ~5 byte file 
-- Throughput: On average approximately 173 consecutive queries were finished in one second (173 queries/sec)
+- Latency: On average it took 7 ms/query for a 1Mb byte file 
+- Throughput: On average approximately 170 consecutive queries were finished in one second (170 queries/sec)
 
 #### Proposed Routing Protocol:
 I chose option 2.2 and varied queries from 10, 20, and 40 with a fixed number of files of 10 for each of the 5 peers.
 
 10 queries:
-- Latency:
-- Throughput:
+- Latency: 5 ms/query
+- Throughput: 10 queries/48ms or 208.3 queries/s
 
 20 queries:
-- Latency:
-- Throughput:
+- Latency: 4.5 ms/query
+- Throughput: 20 queries/90ms or 222 queries/s
 
 40 queries:
-- Latency:
-- Throughput:
+- Latency: 4.6 ms/query
+- Throughput: 40 queries/184ms or 217.3 queries/s
 
 ## Scalability:
 
-Given the system was built as a web app, there are a lot of perks such as being super easy to scale this product to others. Many people are able to access this url at the same time. However, mainly where it falls of at is how fast people are able to query their requests. The latency that we achieved was with files that were only around 5 bytes big. This means that if we had much bigger files in the megabyte or gigabyte range, it would take much more significant time to query. Therefore, my service is not extremely scalable for a large population of users who are uploading large files. Instead, this system is more meant for a few users who are hoping to share a small amount of files amongst each other.
+Given the system was built as a web app, there are a lot of perks such as being super easy to scale this product to others. Many people are able to access this url at the same time. However, mainly where it falls of at is how fast people are able to query their requests. The latency that we achieved was with files that were only around 1 Mb big. This means that if we had much bigger files in the gigabyte range, it would take much more significant time to query. Therefore, my service is not extremely scalable for a large population of users who are uploading large files. Instead, this system is more meant for a few users who are hoping to share a small amount of files amongst each other.
 
 ## Reliability:
 
