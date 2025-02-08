@@ -12,9 +12,9 @@ const InstructionBullets = [
   { text: "Enter another peer id to connect to" },
   { text: "Click on Connect button" },
   { text: "Upload files" },
-  { text: "Click on Send Data button" },
-  { text: "Query for data" },
+  { text: "Search for file that another peer has uploaded" },
   { text: "Click on Query Data button" },
+  { text: "Click on Open File to view the file" },
 ];
 
 export default function Home() {
