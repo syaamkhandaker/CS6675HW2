@@ -30,7 +30,12 @@ export default function Home() {
   const [blobURL, setBlobURL] = useState<string>("");
   const [responseFileName, setResponseFileName] = useState<string>("");
 
-  const checkIfFileExists = (data: any) => {
+  const checkIfFileExists = (data: {
+    keyword: string;
+    sender: string;
+    type: string;
+    startTimeStamp: number;
+  }) => {
     const latestFiles = filesRef.current;
     console.log("Latest", latestFiles);
     for (let i = 0; i < latestFiles.length; i++) {
@@ -96,7 +101,7 @@ export default function Home() {
   };
 
   const handleQueryData = () => {
-    var data = {
+    const data = {
       keyword: query,
       sender: peerId,
       type: "query",
@@ -105,9 +110,14 @@ export default function Home() {
     handleForwardQueries(data);
   };
 
-  const handleForwardQueries = (data: any) => {
-    Object.keys(connectionMap).forEach((conn: any) => {
-      connectionMap[conn].send(data);
+  const handleForwardQueries = (data: {
+    keyword: string;
+    sender: string;
+    type: string;
+    startTimeStamp: number;
+  }) => {
+    Object.keys(connectionMap).forEach((conn: string) => {
+      if (conn !== data.sender) connectionMap[conn].send(data);
     });
   };
 

@@ -1,15 +1,14 @@
 import Peer, { DataConnection } from "peerjs";
 import { PEER_HOST, PEER_PATH, PEER_PORT } from "./common";
 import { PeerResponse } from "./types";
-import { blob } from "stream/consumers";
 
 let peer: Peer | undefined;
-let connectionMap: Record<string, DataConnection> = {};
+const connectionMap: Record<string, DataConnection> = {};
 
 // starts the server for a single peer
 
 const startServer = async (id: string): Promise<PeerResponse> => {
-  var response: PeerResponse = new PeerResponse(true, "");
+  let response: PeerResponse = new PeerResponse(true, "");
   try {
     // we can specify the peer id so peerjs doesn't auto generate it
     peer = new Peer(id, { host: PEER_HOST, port: PEER_PORT, path: PEER_PATH });
@@ -37,7 +36,7 @@ const startServer = async (id: string): Promise<PeerResponse> => {
 // connects to another peer using their id
 
 const connect = async (id: string): Promise<PeerResponse> => {
-  var response: PeerResponse = new PeerResponse(true, "");
+  let response: PeerResponse = new PeerResponse(true, "");
 
   if (!peer) {
     response = {
@@ -115,7 +114,7 @@ const listenForData = (
           } else {
             console.log(`File found: ${file.name}`);
 
-            let returnData = {
+            const returnData = {
               type: "file",
               file: file,
               blob: URL.createObjectURL(file),
