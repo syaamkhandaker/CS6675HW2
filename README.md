@@ -1,4 +1,11 @@
-## Source code: https://github.com/syaamkhandaker/CS6675HW2
+# CS 6675 HW 2: Peer-to-Peer systems
+
+## Source code
+https://github.com/syaamkhandaker/CS6675HW2
+
+## Problem
+
+I did problem 1 option 1 of trying to make a toy peer to peer server that connects with at least 5 peers. Each of these 5 peers can store at most 5 different files and can share them amongst each other.
 
 ## How to run this:
 
@@ -25,12 +32,12 @@ Home page after query finished:
 ## Measurements:
 
 #### Baseline:
-Latency: On average it took 7ms/query for a ~5 byte file
-Throughput: On average approximately 173 consecutive queries were finished in one second (173 queries/sec)
+- Latency: On average it took 7ms/query for a ~5 byte file 
+- Throughput: On average approximately 173 consecutive queries were finished in one second (173 queries/sec)
 
 #### Proposed Routing Protocol:
-Latency:
-Throughput:
+- Latency:
+- Throughput:
 
 
 
