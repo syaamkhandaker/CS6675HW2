@@ -5,6 +5,8 @@ import { PeerResponse } from "./types";
 let peer: Peer | undefined;
 let connectionMap: Record<string, DataConnection> = {};
 
+// starts the server for a single peer
+
 const startServer = async (id: string): Promise<PeerResponse> => {
   var response: PeerResponse = new PeerResponse(true, "");
   try {
@@ -12,10 +14,10 @@ const startServer = async (id: string): Promise<PeerResponse> => {
     peer = new Peer(id, { host: PEER_HOST, port: PEER_PORT, path: PEER_PATH });
 
     if (peer) {
-      console.log("My peer ID is: " + peer.id);
       peer.on("open", (connId) => {
         console.log(`Server with id: ${connId}`);
       });
+
       response = {
         valid: true,
         message: `You have logged in as peer id '${peer.id}'`,
@@ -30,6 +32,8 @@ const startServer = async (id: string): Promise<PeerResponse> => {
   }
   return response;
 };
+
+// connects to another peer using their id
 
 const connect = async (id: string): Promise<PeerResponse> => {
   var response: PeerResponse = new PeerResponse(true, "");
@@ -75,8 +79,62 @@ const connect = async (id: string): Promise<PeerResponse> => {
 
 const getConnectionMap = () => connectionMap;
 
+const getPeer = () => peer;
+
+// this is where peer logic is made
+
+// checkIfFileExists checks to see if query from data is found within the file list of this peer
+// if it is found, it returns the file object, otherwise it returns undefined
+// forwardFunction is a function that is called when the file is not found
+// this function is used to forward the query to other peers
+const listenForData = (
+  checkIfFileExists: (data: any) => File | undefined,
+  forwardFunction: (data: any) => void
+) => {
+  if (!peer) {
+    throw new Error("Peer not initialized");
+  } else {
+    peer.on("connection", (conn) => {
+      conn.on("data", (data: any) => {
+        // once it receives data it comes here
+        console.log(data);
+
+        // if type of data is type query
+        if (data.type === "query") {
+          // if the file is found with this peer, then it returns it
+          const file = checkIfFileExists(data);
+          console.log("File:", file);
+          if (!file) {
+            // if file isn't found then it contacts other peers
+            console.log("File not found, forwarding query");
+            forwardFunction(data);
+          } else {
+            console.log(`File found: ${file.name}`);
+
+            let returnData = {
+              type: "file",
+              file: file,
+              blob: new Blob([file]),
+              sender: data.sender,
+              keyword: data.keyword,
+            };
+            const connnection = peer?.connect(data.sender);
+            connnection?.on("open", () => {
+              connnection?.send(returnData);
+            });
+          }
+        } else if (data.type === "file") {
+          console.log("File received:", data.file.name);
+        }
+      });
+    });
+  }
+};
+
 export const PeerMethods = {
   startServer,
   connect,
   getConnectionMap,
+  getPeer,
+  listenForData,
 };

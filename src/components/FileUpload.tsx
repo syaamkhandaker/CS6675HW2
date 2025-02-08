@@ -5,10 +5,9 @@ import {
 } from "./ui/file-upload";
 
 type FileUploadProps = {
-  files: [];
   setFiles: (files: any) => void;
 };
-export default function FileUpload({ files, setFiles }: FileUploadProps) {
+export default function FileUpload({ setFiles }: FileUploadProps) {
   return (
     <FileUploadRoot
       maxFiles={5}
@@ -20,7 +19,7 @@ export default function FileUpload({ files, setFiles }: FileUploadProps) {
         label="Drag and drop here to upload"
         description=".png, .jpg up to 5MB"
       />
-      <FileUploadList files={files} />
+      <FileUploadList />
     </FileUploadRoot>
   );
 }

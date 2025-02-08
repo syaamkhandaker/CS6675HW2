@@ -1,7 +1,7 @@
 "use client";
 
 import { PeerMethods } from "@/utils/peer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FileUpload from "@/components/FileUpload";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { DataConnection } from "peerjs";
@@ -18,7 +18,7 @@ const InstructionBullets = [
 ];
 
 export default function Home() {
-  const [files, setFiles] = useState<any>();
+  const [files, setFiles] = useState<File[]>([]);
   const [tempPeerId, setTempPeerId] = useState<string>("");
   const [peerId, setPeerId] = useState<string>("");
   const [connectId, setConnectId] = useState<string>("");
@@ -27,6 +27,18 @@ export default function Home() {
     [key: string]: DataConnection;
   }>({});
 
+  const checkIfFileExists = (data: any) => {
+    const latestFiles = filesRef.current;
+    console.log("Latest", latestFiles);
+    for (let i = 0; i < latestFiles.length; i++) {
+      console.log(latestFiles[i].name.split(".")[0], data.keyword);
+      if (latestFiles[i].name.split(".")[0] === data.keyword) {
+        return latestFiles[i];
+      }
+    }
+    return undefined;
+  };
+
   const handlePeerIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempPeerId(e.target.value);
   };
@@ -34,6 +46,8 @@ export default function Home() {
   const handleLogin = async () => {
     setPeerId(tempPeerId);
     const response = await PeerMethods.startServer(tempPeerId);
+    PeerMethods.listenForData(checkIfFileExists, handleForwardQueries);
+
     if (response.valid) {
       toaster.create({
         type: "success",
@@ -53,8 +67,9 @@ export default function Home() {
 
   const handleConnect = async () => {
     const response = await PeerMethods.connect(connectId);
-    setConnectionMap({ ...connectionMap, ...PeerMethods.getConnectionMap() });
+
     if (response.valid) {
+      setConnectionMap({ ...connectionMap, ...PeerMethods.getConnectionMap() });
       toaster.create({
         type: "success",
         title: response.message,
@@ -75,7 +90,12 @@ export default function Home() {
     var data = {
       keyword: query,
       sender: peerId,
+      type: "query",
     };
+    handleForwardQueries(data);
+  };
+
+  const handleForwardQueries = (data: any) => {
     Object.keys(connectionMap).forEach((conn: any) => {
       connectionMap[conn].send(data);
     });
@@ -91,6 +111,12 @@ export default function Home() {
     { text: "Upload Data" },
     { text: "Query Data", onClick: handleQueryData, onChange: queryChange },
   ];
+
+  const filesRef = useRef(files);
+
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 gap-y-6">
@@ -122,7 +148,7 @@ export default function Home() {
                     </button>
                   </>
                 ) : (
-                  <FileUpload files={files} setFiles={setFiles} />
+                  <FileUpload setFiles={setFiles} />
                 )}
                 {peerId !== "" && index === 0 && (
                   <div>Logged in as {peerId}</div>
