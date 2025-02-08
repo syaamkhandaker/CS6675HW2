@@ -25,10 +25,12 @@ Home page after query finished:
 
 ## Scalability:
 
-Given the super quick latency of searching for files, the website is somewhat scalable. Many people could access this website at the same time and send and receive files as they please. However, a lot of the functionalities fall off once larger files are starting to be uploaded at scale.
+Given the system was built as a web app, there are a lot of perks such as being super easy to scale this product to others. Many people are able to access this url at the same time. However, mainly where it falls of at is how fast people are able to query their requests. The latency that we achieved was with files that were only 3 bytes big. This means that if we had much bigger files in the megabyte or gigabyte range, it would take much more significant time to query. Therefore, my service is not extremely scalable for a large population of users who are uploading large files. Instead, this system is more meant for a few users who are hoping to share a small amount of files amongst each other.
 
 ## Reliability:
 
-A lot of my peer to peer system seems to be reliable due to a lot of guardrails in place. However,
+A lot of my peer to peer system seems to be reliable due to a lot of guardrails in place.
 
 ## Anonymity:
+
+This service's anonymity depends on what type of data or tracking that peerjs might be doing. In addition to that, with the dependency, some developers are able to see all open connections currently, events that happened for closed peers, and are able close listening services. However, all of this really depends on how well the website gets deployed on the internet. In the case that lots of security protocols are in place, we'll have a high chance that every user is anonymous. In the case that the deployment isn't super secure, hackers and other developers can probably more easily take advantage of peerjs and attempt to exploit the services.
