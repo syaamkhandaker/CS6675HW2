@@ -56,7 +56,6 @@ export default function Home() {
     const response = await PeerMethods.startServer(tempPeerId);
     PeerMethods.listenForData(
       checkIfFileExists,
-      handleForwardQueries,
       setTimeTaken,
       setBlobURL,
       setResponseFileName
@@ -110,14 +109,14 @@ export default function Home() {
     handleForwardQueries(data);
   };
 
-  const handleForwardQueries = (data: {
+  const handleForwardQueries = async (data: {
     keyword: string;
     sender: string;
     type: string;
     startTimeStamp: number;
   }) => {
-    Object.keys(connectionMap).forEach((conn: string) => {
-      if (conn !== data.sender) connectionMap[conn].send(data);
+    Object.keys(connectionMap).forEach(async (conn: string) => {
+      if (conn !== data.sender) await connectionMap[conn].send(data);
     });
   };
 

@@ -81,6 +81,14 @@ const getConnectionMap = () => connectionMap;
 
 const getPeer = () => peer;
 
+const forwardFunction = async (data: any) => {
+  const connectionMap = getConnectionMap();
+  for (const key in connectionMap) {
+    const conn = connectionMap[key];
+    conn.send(data);
+  }
+};
+
 // this is where peer logic is made
 
 // checkIfFileExists checks to see if query from data is found within the file list of this peer
@@ -89,7 +97,6 @@ const getPeer = () => peer;
 // this function is used to forward the query to other peers
 const listenForData = (
   checkIfFileExists: (data: any) => File | undefined,
-  forwardFunction: (data: any) => void,
   setTimeTaken: (time: number) => void,
   setBlobURL: (url: string) => void,
   setResponseFileName: (name: string) => void
@@ -98,7 +105,7 @@ const listenForData = (
     throw new Error("Peer not initialized");
   } else {
     peer.on("connection", (conn) => {
-      conn.on("data", (data: any) => {
+      conn.on("data", async (data: any) => {
         // once it receives data it comes here
         console.log(data);
 
@@ -110,7 +117,7 @@ const listenForData = (
           if (!file) {
             // if file isn't found then it contacts other peers
             console.log("File not found, forwarding query");
-            forwardFunction(data);
+            await forwardFunction(data);
           } else {
             console.log(`File found: ${file.name}`);
 
