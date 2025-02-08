@@ -22,14 +22,17 @@ Home page with entered queries:
 Home page after query finished:
 ![img2](https://github.com/user-attachments/assets/ffb9e955-6ec4-4f74-b8c3-3e7b0e7e4599)
 
+Measurements:
+Latency: On average it took 7ms/query for a ~5 byte file
+Throughput: 
 
 ## Scalability:
 
-Given the system was built as a web app, there are a lot of perks such as being super easy to scale this product to others. Many people are able to access this url at the same time. However, mainly where it falls of at is how fast people are able to query their requests. The latency that we achieved was with files that were only 3 bytes big. This means that if we had much bigger files in the megabyte or gigabyte range, it would take much more significant time to query. Therefore, my service is not extremely scalable for a large population of users who are uploading large files. Instead, this system is more meant for a few users who are hoping to share a small amount of files amongst each other.
+Given the system was built as a web app, there are a lot of perks such as being super easy to scale this product to others. Many people are able to access this url at the same time. However, mainly where it falls of at is how fast people are able to query their requests. The latency that we achieved was with files that were only around 5 bytes big. This means that if we had much bigger files in the megabyte or gigabyte range, it would take much more significant time to query. Therefore, my service is not extremely scalable for a large population of users who are uploading large files. Instead, this system is more meant for a few users who are hoping to share a small amount of files amongst each other.
 
 ## Reliability:
 
-A lot of my peer to peer system seems to be reliable due to a lot of guardrails in place.
+A lot of my peer to peer system seems to be reliable due to a lot of guardrails in place. In addition, the website is developed in a way that is super self-explanatory and easy to use- to make this a priority, instructions are even provided above the textfields and buttons. Some fallbacks with the design though mainly deal with small features that were left out. For one, the error checking is done somewhat minimally. In other words, only the main errors are covered and shown through a status popup. One of the other big concerns deal with how bigger files take considerably longer to retrieve. This makes it less reliable to retrieve data super quickly. 
 
 ## Anonymity:
 
