@@ -30,6 +30,10 @@ Home page with entered queries:
 Home page after query finished:
 ![img2](https://github.com/user-attachments/assets/ffb9e955-6ec4-4f74-b8c3-3e7b0e7e4599)
 
+Sample Blob Page:
+![img3](https://github.com/user-attachments/assets/b988a277-b636-4fcf-a12d-3b8b5392b954)
+
+
 ## Measurements:
 
 #### Baseline:
