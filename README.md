@@ -34,6 +34,9 @@ Sample Blob Page:
 ![img3](https://github.com/user-attachments/assets/b988a277-b636-4fcf-a12d-3b8b5392b954)
 
 
+Routing functionalities:
+The way this system routes requests is by a BFS structure. The first peer checks its neighbors to see if any of them matches the query. If none of those neighbors match, then it gets forwarded to the neighbor's neighbor, until it eventually finds a match. This BFS structure is extremely key to ensure that this system is peer to peer.
+
 ## Measurements:
 
 #### Baseline:
@@ -59,6 +62,9 @@ I chose option 2.2 and varied queries from 10, 20, and 40 with a fixed number of
 
 - Latency: 4.6 ms/query
 - Throughput: 40 queries/184ms or 217.3 queries/s
+
+## Discussion
+It's interesting to see that the times are staying pretty constant for every interval increase of queries. My initial expectation was that as you increase the amount of queries, the system will get overloaded even more, causing the throughput to decrease and the latency to increase. However, that is not the case. Within the alternative systems, I found that the 20 query option to marginally be the best because of its fastest latency time and highest throughput.
 
 ## Scalability:
 
