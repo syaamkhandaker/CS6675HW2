@@ -1,6 +1,7 @@
 # CS 6675 HW 2: Peer-to-Peer systems
 
 ## Source code
+
 https://github.com/syaamkhandaker/CS6675HW2
 
 ## Problem
@@ -21,9 +22,9 @@ To properly run this, you can run the startup.sh shell script provided. This com
 4. From any peer you can input queries that represent file names of files uploaded in other peers. In other words, you can search for files that are already uploaded in other peers. The current system checks to see if the entire query matches the filename without the extension (e.g. test.txt -> test).
 5. When it finishes searching through all peers, the timestamp for how long it took and a blob url is returned to the user. Using the blob url, any peer is able to download another peer's file.
 
-
 ## Screen shots:
-Home page with entered queries: 
+
+Home page with entered queries:
 ![img1](https://github.com/user-attachments/assets/0dcefea6-04a4-484f-9b2b-043bf6058710)
 
 Home page after query finished:
@@ -32,31 +33,36 @@ Home page after query finished:
 ## Measurements:
 
 #### Baseline:
-- Latency: On average it took 7 ms/query for a 1Mb byte file 
+
+- Latency: On average it took 7 ms/query for a 1Mb byte file
 - Throughput: On average approximately 170 consecutive queries were finished in one second (170 queries/sec)
 
 #### Proposed Routing Protocol:
+
 I chose option 2.2 and varied queries from 10, 20, and 40 with a fixed number of files of 10 for each of the 5 peers.
 
 10 queries:
+
 - Latency: 5 ms/query
 - Throughput: 10 queries/48ms or 208.3 queries/s
 
 20 queries:
+
 - Latency: 4.5 ms/query
 - Throughput: 20 queries/90ms or 222 queries/s
 
 40 queries:
+
 - Latency: 4.6 ms/query
 - Throughput: 40 queries/184ms or 217.3 queries/s
 
 ## Scalability:
 
-Given the system was built as a web app, there are a lot of perks such as being super easy to scale this product to others. Many people are able to access this url at the same time. However, mainly where it falls of at is how fast people are able to query their requests. The latency that we achieved was with files that were only around 1 Mb big. This means that if we had much bigger files in the gigabyte range, it would take much more significant time to query. Therefore, my service is not extremely scalable for a large population of users who are uploading large files. Instead, this system is more meant for a few users who are hoping to share a small amount of files amongst each other.
+Given the system was built as a web app, there are a lot of perks such as being super easy to scale this product to others. Many people are able to access this url at the same time. However, mainly where it falls of at is how fast people are able to query their requests. The latency that we achieved was with files that were only around 1 Mb big. This means that if we had much bigger files in the gigabyte range, it would take much more significant time to query. Therefore, my service is not extremely scalable for a large population of users who are uploading large files. Instead, this system is more meant for a few users who are hoping to share a small amount of files amongst each other. One other big concern is with how Typescript and Javascript are fundamentally single threaded, meaning simultaneous actions would probably take a while.
 
 ## Reliability:
 
-A lot of my peer to peer system seems to be reliable due to a lot of guardrails in place. In addition, the website is developed in a way that is super self-explanatory and easy to use- to make this a priority, instructions are even provided above the textfields and buttons. Some fallbacks with the design though mainly deal with small features that were left out. For one, the error checking is done somewhat minimally. In other words, only the main errors are covered and shown through a status popup. One of the other big concerns deal with how bigger files take considerably longer to retrieve. This makes it less reliable to retrieve data super quickly. 
+A lot of my peer to peer system seems to be reliable due to a lot of guardrails in place. In addition, the website is developed in a way that is super self-explanatory and easy to use- to make this a priority, instructions are even provided above the textfields and buttons. Some fallbacks with the design though mainly deal with small features that were left out. For one, the error checking is done somewhat minimally. In other words, only the main errors are covered and shown through a status popup. One of the other big concerns deal with how bigger files take considerably longer to retrieve. This makes it less reliable to retrieve data super quickly.
 
 ## Anonymity:
 
