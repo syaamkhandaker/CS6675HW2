@@ -1,3 +1,4 @@
+import { MAX_FILES } from "@/utils/common";
 import {
   FileUploadDropzone,
   FileUploadList,
@@ -10,7 +11,7 @@ type FileUploadProps = {
 export default function FileUpload({ setFiles }: FileUploadProps) {
   return (
     <FileUploadRoot
-      maxFiles={5}
+      maxFiles={MAX_FILES}
       onFileAccept={(file) => {
         setFiles(file.files);
       }}
