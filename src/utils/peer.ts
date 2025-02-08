@@ -1,10 +1,12 @@
 import Peer, { DataConnection } from "peerjs";
 import { PEER_HOST, PEER_PATH, PEER_PORT } from "./common";
+import { PeerResponse } from "./types";
 
 let peer: Peer | undefined;
 let connectionMap: Record<string, DataConnection> = {};
 
-const startServer = async (id: string): Promise<void> => {
+const startServer = async (id: string): Promise<PeerResponse> => {
+  var response: PeerResponse = new PeerResponse(true, "");
   try {
     // we can specify the peer id so peerjs doesn't auto generate it
     peer = new Peer(id, { host: PEER_HOST, port: PEER_PORT, path: PEER_PATH });
@@ -14,20 +16,38 @@ const startServer = async (id: string): Promise<void> => {
       peer.on("open", (connId) => {
         console.log(`Server with id: ${connId}`);
       });
+      response = {
+        valid: true,
+        message: `You have logged in as peer id '${peer.id}'`,
+      };
     }
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
+    response = {
+      valid: false,
+      message: e.message,
+    };
   }
+  return response;
 };
 
-const connect = async (id: string): Promise<void> => {
+const connect = async (id: string): Promise<PeerResponse> => {
+  var response: PeerResponse = new PeerResponse(true, "");
+
   if (!peer) {
-    throw new Error(`Peer (${id}) not initialized`);
+    response = {
+      valid: false,
+      message: `Peer (${id}) not initialized`,
+    };
+    return response;
   }
 
   if (id in connectionMap) {
-    console.log(`Already connected to peer (${id})`);
-    return;
+    response = {
+      valid: false,
+      message: `Already connected to peer (${id})`,
+    };
+    return response;
   }
 
   try {
@@ -38,28 +58,25 @@ const connect = async (id: string): Promise<void> => {
       conn.on("open", () => {
         console.log(`Connected to peer (${id})`);
       });
+      return {
+        valid: true,
+        message: `You have connected to peer id '${id}'`,
+      };
     }
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
+    return {
+      valid: false,
+      message: e.message,
+    };
   }
+  return response;
 };
 
-const sendData = (id: string, data: any): void => {
-  if (!peer) {
-    throw new Error("Peer not initialized");
-  }
-  if (!(id in connectionMap)) {
-    throw new Error("Not connected to peer");
-  }
-  try {
-    connectionMap[id].send(data);
-  } catch (e) {
-    console.log(e);
-  }
-};
+const getConnectionMap = () => connectionMap;
 
 export const PeerMethods = {
   startServer,
   connect,
-  sendData,
+  getConnectionMap,
 };

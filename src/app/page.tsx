@@ -3,58 +3,82 @@
 import { PeerMethods } from "@/utils/peer";
 import { useEffect, useState } from "react";
 import FileUpload from "@/components/FileUpload";
-import MessageComponent from "@/components/MessageComponent";
 import { Toaster, toaster } from "@/components/ui/toaster";
+import { DataConnection } from "peerjs";
 
 const InstructionBullets = [
   { text: "Enter your peer id" },
-  { text: "Click on Login" },
+  { text: "Click on Login button" },
   { text: "Enter another peer id to connect to" },
-  { text: "Click on Connect" },
-  { text: "Upload files to send" },
-  { text: "Click on Send Data" },
+  { text: "Click on Connect button" },
+  { text: "Upload files" },
+  { text: "Click on Send Data button" },
+  { text: "Query for data" },
+  { text: "Click on Query Data button" },
 ];
 
 export default function Home() {
   const [files, setFiles] = useState<any>();
+  const [tempPeerId, setTempPeerId] = useState<string>("");
   const [peerId, setPeerId] = useState<string>("");
   const [connectId, setConnectId] = useState<string>("");
+  const [query, setQuery] = useState<string>("");
+  const [connectionMap, setConnectionMap] = useState<{
+    [key: string]: DataConnection;
+  }>({});
 
   const handlePeerIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPeerId(e.target.value);
+    setTempPeerId(e.target.value);
   };
 
-  const handleLogin = () => {
-    toaster.create({
-      type: "success",
-      title: `You have logged in as peer id '${peerId}'`,
-    });
-    PeerMethods.startServer(peerId);
+  const handleLogin = async () => {
+    setPeerId(tempPeerId);
+    const response = await PeerMethods.startServer(tempPeerId);
+    if (response.valid) {
+      toaster.create({
+        type: "success",
+        title: response.message,
+      });
+    } else {
+      toaster.create({
+        type: "error",
+        title: response.message,
+      });
+    }
   };
 
   const handleConnectIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConnectId(e.target.value);
   };
 
-  const handleConnect = () => {
-    toaster.create({
-      type: "success",
-      title: `You have connected to peer id '${connectId}'`,
-    });
-    PeerMethods.connect(connectId);
+  const handleConnect = async () => {
+    const response = await PeerMethods.connect(connectId);
+    setConnectionMap({ ...connectionMap, ...PeerMethods.getConnectionMap() });
+    if (response.valid) {
+      toaster.create({
+        type: "success",
+        title: response.message,
+      });
+    } else {
+      toaster.create({
+        type: "error",
+        title: response.message,
+      });
+    }
   };
 
-  const handleDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
-    setData(e.target.value);
+  const queryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
   };
 
-  const handleSendData = () => {
-    toaster.create({
-      type: "success",
-      title: `You have sent uploaded files to peer id '${connectId}'`,
+  const handleQueryData = () => {
+    var data = {
+      keyword: query,
+      sender: peerId,
+    };
+    Object.keys(connectionMap).forEach((conn: any) => {
+      connectionMap[conn].send(data);
     });
-    PeerMethods.sendData(peerId, files);
   };
 
   const buttonStates = [
@@ -64,13 +88,10 @@ export default function Home() {
       onClick: handleConnect,
       onChange: handleConnectIdChange,
     },
-    { text: "Send Data", onClick: handleSendData, onChange: handleDataChange },
+    { text: "Upload Data" },
+    { text: "Query Data", onClick: handleQueryData, onChange: queryChange },
   ];
 
-  useEffect(() => {
-    const init = () => {};
-    init();
-  }, []);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 gap-y-6">
       <div className="text-5xl font-semibold mb-10">Peer to Peer System</div>
@@ -85,22 +106,34 @@ export default function Home() {
         })}
       </div>
       <div className="w-full flex justify-center">
-        <div className="w-[80%] flex justify-between border-2 p-4 rounded-xl">
+        <div className="w-[80%] justify-between border-2 rounded-xl grid grid-cols-2">
           {buttonStates.map((button, index) => {
             return (
-              <div key={index} className="flex flex-col gap-y-4">
+              <div key={index} className="flex flex-col gap-y-4 p-4">
                 <div className="text-2xl font-semibold ">{button.text}</div>
                 {index !== 2 ? (
-                  <input onChange={button.onChange} type="text" />
+                  <>
+                    <input onChange={button.onChange} type="text" />
+                    <button
+                      className="bg-blue-500 py-4 w-full text-white rounded-xl text-lg"
+                      onClick={button.onClick}
+                    >
+                      {button.text}
+                    </button>
+                  </>
                 ) : (
                   <FileUpload files={files} setFiles={setFiles} />
                 )}
-                <button
-                  className="bg-blue-500 py-4 w-full text-white rounded-xl text-lg"
-                  onClick={button.onClick}
-                >
-                  {button.text}
-                </button>
+                {peerId !== "" && index === 0 && (
+                  <div>Logged in as {peerId}</div>
+                )}
+                {index === 1 && (
+                  <div>
+                    {Object.keys(connectionMap).map((el, idx) => {
+                      return <div key={idx}>Connected to {el}</div>;
+                    })}
+                  </div>
+                )}
               </div>
             );
           })}
